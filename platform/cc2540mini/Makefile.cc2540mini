@@ -1,0 +1,34 @@
+ifndef CONTIKI
+  $(error CONTIKI not defined! You must specify where CONTIKI resides!)
+endif
+
+CONTIKI_TARGET_DIRS = .
+CONTIKI_TARGET_MAIN = $(addprefix $(OBJECTDIR)/,contiki-main.rel)
+
+CONTIKI_TARGET_SOURCEFILES = contiki-main.c
+
+CONTIKI_SOURCEFILES += $(CONTIKI_TARGET_SOURCEFILES)
+
+CLEAN += *.cc2540mini
+
+FORCE:
+
+# .sensinode target so we can behave similar to other targets
+%.$(TARGET): %.hex FORCE
+	cp $< $(<:.hex=.$(TARGET))
+	@echo "\nReport"
+	@echo "==============="
+	@echo 'Code footprint:'
+	@echo    'Area                                Addr        Size' \
+	         '         Decimal'
+	@echo    '----------------------------------  --------    --------' \
+	         '     --------'
+	@echo -n 'HOME,CSEG,CONST,XINIT,GS*           $(HOME_START)    '
+	@egrep ',CODE\)' $(<:.hex=.map) | egrep -v '(^BANK[1-9][^=])' | uniq | \
+	awk '{ SUM += $$5 } END { printf "%08X =    %8d", SUM, SUM }'
+	@echo '. bytes (REL,CON,CODE)'
+	@egrep '(^BANK[1-9][^=])' $(<:.hex=.map) | uniq | sort
+	@egrep -A 5 'Other memory' $(<:.hex=.mem)
+
+CONTIKI_CPU=$(CONTIKI)/cpu/cc2540
+include $(CONTIKI_CPU)/Makefile.cc2540
