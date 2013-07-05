@@ -7,9 +7,6 @@
 #include "sys/rtimer.h"
 #include "sys/autostart.h"
 #include "dev/leds.h"
-#include "dev/leds.h"
-
-SENSORS(&button_3_sensor, &button_4_sensor);
 
 void
 hw_init(void)
@@ -25,6 +22,8 @@ int
 main(void) CC_NON_BANKED
 {
   hw_init();
+
+  leds_off(LEDS_ALL);
 
   process_init();
   ctimer_init();
