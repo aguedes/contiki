@@ -1,0 +1,4 @@
+void
+putchar(char c)
+{
+}
