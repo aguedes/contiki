@@ -1,6 +1,7 @@
 #include "8051def.h"
 #include "soc.h"
 #include "sys/clock.h"
+#include "sys/autostart.h"
 #include "dev/leds.h"
 #include "dev/clock-isr.h"
 
@@ -13,6 +14,14 @@ main(void) CC_NON_BANKED
 
   clock_init();
   soc_init();
+
+  process_init();
+
+  autostart_start(autostart_processes);
+
+  while(1) {
+    process_run();
+  }
 
   return 0;
 }
