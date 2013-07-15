@@ -3,6 +3,7 @@
 #include "sys/clock.h"
 #include "sys/etimer.h"
 #include "sys/ctimer.h"
+#include "sys/rtimer.h"
 #include "sys/autostart.h"
 #include "dev/leds.h"
 #include "dev/clock-isr.h"
@@ -16,6 +17,7 @@ main(void) CC_NON_BANKED
 
   clock_init();
   soc_init();
+  rtimer_init();
 
   process_init();
 
