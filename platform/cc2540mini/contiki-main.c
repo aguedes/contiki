@@ -6,7 +6,10 @@
 #include "sys/ctimer.h"
 #include "sys/rtimer.h"
 #include "sys/autostart.h"
+#include "dev/button-sensor.h"
 #include "dev/leds.h"
+
+SENSORS(&button_3_sensor, &button_4_sensor);
 
 void
 hw_init(void)
@@ -29,6 +32,8 @@ main(void) CC_NON_BANKED
   ctimer_init();
   process_start(&etimer_process, NULL);
   autostart_start(autostart_processes);
+  process_start(&sensors_process, NULL);
+  BUTTON_SENSOR_ACTIVATE();
 
   while(1) {
     process_run();
