@@ -2,6 +2,8 @@ ifndef CONTIKI
   $(error CONTIKI not defined! You must specify where CONTIKI resides!)
 endif
 
+PROG = cc-tool
+
 CONTIKI_TARGET_DIRS = . dev
 CONTIKI_TARGET_MAIN = $(addprefix $(OBJECTDIR)/,contiki-main.rel)
 
@@ -31,6 +33,9 @@ FORCE:
 	@echo '. bytes (REL,CON,CODE)'
 	@egrep '(^BANK[1-9][^=])' $(<:.hex=.map) | uniq | sort
 	@egrep -A 5 'Other memory' $(<:.hex=.mem)
+
+%.upload: %.hex
+	$(PROG) -e -v -w $<
 
 CONTIKI_CPU=$(CONTIKI)/cpu/cc253x
 include $(CONTIKI_CPU)/Makefile.cc253x
