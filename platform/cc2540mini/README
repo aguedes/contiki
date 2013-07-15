@@ -1,0 +1,48 @@
+Contiki platform-specific implementation for CC2540 Mini Development Kit
+========================================================================
+
+This is the Contiki port for the Texas Instruments' CC2540 Mini Development Kit board. This board is based on the CC2540, an 8051 architecture System-on-Chip with 2.4GHz Bluetooth low energy capability.
+
+More info: 
+SoC:    http://www.ti.com/product/cc2540
+Board:  http://www.ti.com/tool/cc2540dk-mini
+
+
+Preparing the environment for 8051-based platforms
+==================================================
+
+0. Make sure you have a CC2540MINI and a CC-Debugger.
+
+1. Build  and install SDCC toolchain with support for huge memory model and stack auto.
+  Details: https://github.com/contiki-os/contiki/wiki/8051-Requirements
+
+2. Build and install cc-tool
+  Source code: http://sourceforge.net/projects/cctool/
+
+
+Building and flashing Contiki applications
+==========================================
+
+You need to compile Contiki alongside one or more applications to get a final firmware. Go to one of the examples:
+
+  $ cd /path/to/contiki/examples/blink
+
+To build the application you need to specify the target platform. Our platform is "cc2540mini":
+
+  $ make TARGET=cc2540mini
+
+You can save the target:
+
+  $ echo "TARGET=cc2540mini" > Makefile.target
+
+Now you can omit TARGET when compiling:
+
+  $ make
+
+To flash the generated hex file, run with the board connected to CC-Debugger:
+
+  $ make blink.upload
+
+Try out the example with buttons in examples/cc2540mini/buttons.
+
+More info about Contiki build system: https://github.com/contiki-os/contiki/wiki/Contiki-Build-System
