@@ -5,8 +5,11 @@
 #include "sys/ctimer.h"
 #include "sys/rtimer.h"
 #include "sys/autostart.h"
+#include "dev/button-sensor.h"
 #include "dev/leds.h"
 #include "dev/clock-isr.h"
+
+SENSORS(&button_3_sensor, &button_4_sensor);
 
 int
 main(void) CC_NON_BANKED
@@ -23,6 +26,9 @@ main(void) CC_NON_BANKED
 
   process_start(&etimer_process, NULL);
   ctimer_init();
+
+  process_start(&sensors_process, NULL);
+  BUTTON_SENSOR_ACTIVATE();
 
   autostart_start(autostart_processes);
 
