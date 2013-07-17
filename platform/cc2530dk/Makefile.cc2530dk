@@ -50,5 +50,5 @@ sensinode.serialdump:
 	$(SERIALDUMP)
 
 ### Define the CPU directory
-CONTIKI_CPU=$(CONTIKI)/cpu/cc253x
+CONTIKI_CPU=$(CONTIKI)/cpu/cc25xx/cc253x
 include $(CONTIKI_CPU)/Makefile.cc253x
