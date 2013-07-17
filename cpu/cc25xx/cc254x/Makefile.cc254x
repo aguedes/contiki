@@ -1,0 +1,3 @@
+CONTIKI_CPU_DIRS = .
+
+include $(CONTIKI_CPU)/../common/Makefile.common
