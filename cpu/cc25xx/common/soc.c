@@ -38,7 +38,7 @@
  * \author
  *         George Oikonomou - <oikonomou@users.sourceforge.net>
  */
-#include "cc253x.h"
+#include "cc25xx.h"
 #include "8051def.h"
 #include "sfr-bits.h"
 

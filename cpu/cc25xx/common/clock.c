@@ -40,7 +40,7 @@
 #include "sfr-bits.h"
 #include "sys/clock.h"
 #include "sys/etimer.h"
-#include "cc253x.h"
+#include "cc25xx.h"
 #include "sys/energest.h"
 
 /* Sleep timer runs on the 32k RC osc. */

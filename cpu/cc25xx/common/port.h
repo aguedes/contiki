@@ -40,7 +40,7 @@
 #ifndef PORT_H_
 #define PORT_H_
 
-#include "cc253x.h"
+#include "cc254x.h"
 #include "sfr-bits.h"
 /*---------------------------------------------------------------------------*/
 /* Use these to configure your platform's hardware */

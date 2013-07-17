@@ -49,7 +49,7 @@
 
 #include "sys/rtimer.h"
 #include "sfr-bits.h"
-#include "cc253x.h"
+#include "cc25xx.h"
 #include "sys/energest.h"
 
 #include "debug.h"
