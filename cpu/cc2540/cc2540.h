@@ -49,6 +49,8 @@
 
 #include <compiler.h>
 
+#define BIT(n) (1UL << (n))
+
 /* Interrupt Numbers  */
 #define RFERR_IRQ     0  /* RF TXFIFO underflow and RXFIFO overflow. */
 #define ADC_IRQ       1  /* ADC end of conversion */
@@ -236,6 +238,8 @@ SFR(SLEEPSTA,  0x9D); /* Sleep-mode control status */
 
 /* Power Management and Clocks */
 SFR(CLKCONCMD, 0xC6); /* Clock control command */
+#define CLKCONCMD_OSC            BIT(6)
+#define CLKCONCMD_TICKSPD_500    (BIT(5) | BIT(4))
 SFR(CLKCONSTA, 0x9E); /* Clock control status */
 
 /* Timer 1 */
