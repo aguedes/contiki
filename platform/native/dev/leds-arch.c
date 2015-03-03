@@ -55,6 +55,14 @@ leds_arch_get(void)
 void
 leds_arch_set(unsigned char l)
 {
+  unsigned char changed = leds ^ l;
   leds = l;
+
+  if (changed & LEDS_GREEN) {
+      if (leds & LEDS_GREEN)
+          printf("LEDS_GREEN is on\n");
+      else
+          printf("LEDS_GREEN is off\n");
+  }
 }
 /*---------------------------------------------------------------------------*/
