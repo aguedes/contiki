@@ -1,0 +1,5 @@
+CONTIKI_CPU_DIRS += boot
+
+CONTIKI_SOURCEFILES += multiboot.S
+
+LDFLAGS += -T $(CONTIKI)/cpu/x86/boot/multiboot.ld
