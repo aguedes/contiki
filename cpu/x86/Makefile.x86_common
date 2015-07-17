@@ -3,11 +3,11 @@ CONTIKI_CPU_DIRS += . init/common
 CONTIKI_SOURCEFILES += gdt.c helpers.S idt.c cpu.c
 
 CC       = gcc
-LD       = gcc
+LD       = ld
 AS       = as
 OBJCOPY  = objcopy
 SIZE     = size
 STRIP    = strip
 
 CFLAGS  += -Wall -g
-LDFLAGS += -Wl,-Map=contiki-$(TARGET).map,--build-id=none
+LDFLAGS += -Map=contiki-$(TARGET).map --build-id=none

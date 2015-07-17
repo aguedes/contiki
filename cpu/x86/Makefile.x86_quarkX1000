@@ -5,5 +5,5 @@ CONTIKI_CPU_DIRS += drivers/legacy_pc init/legacy_pc
 CONTIKI_SOURCEFILES += rtc.c pit.c pic.c irq.c nmi.c
 
 CFLAGS += -m32 -march=i586 -mtune=i586
-LDFLAGS += -m32
+LDFLAGS += -melf_i386
 ASFLAGS += --32 -march=i586 -mtune=i586
