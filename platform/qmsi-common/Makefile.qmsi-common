@@ -6,8 +6,8 @@ QMSI_DIRS += $(QMSI_PATH)/sys
 QMSI_FILES += app_entry.c newlib-syscalls.c
 QMSI_CFLAGS += -DPRINTF_ENABLE
 
-COMMON_DIRS += $(COMMON) $(COMMON)/core/sys $(COMMON)/core/dev
-COMMON_FILES += clock.c rtimer-arch.c watchdog.c
+COMMON_DIRS += $(COMMON) $(COMMON)/core/sys $(COMMON)/core/dev $(COMMON)/dev
+COMMON_FILES += clock.c rtimer-arch.c watchdog.c cc2520.c
 
 CONTIKIDIRS += $(QMSI_DIRS) $(COMMON_DIRS)
 CONTIKIFILES += $(QMSI_FILES) $(COMMON_FILES)
