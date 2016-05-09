@@ -103,6 +103,8 @@ typedef uint32_t rtimer_clock_t;
 
 #define LINKADDR_CONF_SIZE                      8
 
+#define NODE_ID                                 3
+
 /* Include the project config */
 /* PROJECT_CONF_H might be defined in the project Makefile */
 #ifdef PROJECT_CONF_H

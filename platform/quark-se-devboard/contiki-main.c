@@ -43,10 +43,6 @@
 #include "net/ipv6/uip-ds6.h"
 #endif /* NETSTACK_CONF_WITH_IPV6 */
 
-#ifndef NODE_ID
-#define NODE_ID        0x03
-#endif /* NODE_ID */
-
 SENSORS(&button_sensor, &button_sensor2);
 
 /*
