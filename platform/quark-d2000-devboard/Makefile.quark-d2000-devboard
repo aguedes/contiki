@@ -1,10 +1,15 @@
 include $(CONTIKI)/platform/quark-d2000-devboard/Makefile.bsp-quark-d2000-devboard
 include $(CONTIKI)/platform/qmsi-common/Makefile.qmsi-common
 
-CONTIKI_TARGET_DIRS += . dev
-CONTIKIFILES += contiki-main.c cc2520-arch.c
+CONTIKI_TARGET_DIRS += .
+CONTIKIFILES += contiki-main.c
 CONTIKI_TARGET_MAIN = ${addprefix $(OBJECTDIR)/,contiki-main.o}
 
+ifeq ($(HAS_STACK),1)
+CONTIKI_TARGET_DIRS += dev
+CONTIKIFILES += network.c cc2520-arch.c
+
 MODULES += core/net core/net/mac core/net/llsec
+endif
 
 LDFLAGS += -T $(QMSI_PATH)/soc/quark_d2000/quark_d2000.ld

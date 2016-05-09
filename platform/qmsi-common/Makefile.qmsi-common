@@ -6,8 +6,14 @@ QMSI_DIRS += $(QMSI_PATH)/sys
 QMSI_FILES += app_entry.c newlib-syscalls.c
 QMSI_CFLAGS += -DPRINTF_ENABLE
 
-COMMON_DIRS += $(COMMON) $(COMMON)/core/sys $(COMMON)/core/dev $(COMMON)/dev
-COMMON_FILES += clock.c rtimer-arch.c watchdog.c cc2520.c
+COMMON_DIRS += $(COMMON) $(COMMON)/core/sys $(COMMON)/core/dev
+COMMON_FILES += clock.c rtimer-arch.c watchdog.c
+
+ifeq ($(HAS_STACK),1)
+COMMON_DIRS += $(COMMON)/dev
+COMMON_FILES += cc2520.c
+CFLAGS += -DHAS_STACK
+endif
 
 CONTIKIDIRS += $(QMSI_DIRS) $(COMMON_DIRS)
 CONTIKIFILES += $(QMSI_FILES) $(COMMON_FILES)

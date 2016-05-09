@@ -27,33 +27,9 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "contiki.h"
-#include "dev/watchdog.h"
-#include "network.h"
+#ifndef NETWORK_H
+#define NETWORK_H
 
-int
-main(void)
-{
-  clock_init();
-  rtimer_init();
-  watchdog_init();
-  process_init();
+void network_init(void);
 
-  process_start(&etimer_process, NULL);
-  ctimer_init();
-
-#ifdef HAS_STACK
-  network_init();
-#endif /* HAS_STASK */
-
-  watchdog_start();
-  autostart_start(autostart_processes);
-
-  while(1) {
-    watchdog_periodic();
-
-    process_run();
-  }
-
-  return 0;
-}
+#endif /* NETWORK_H */
