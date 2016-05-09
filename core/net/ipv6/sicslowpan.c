@@ -1496,11 +1496,14 @@ output(const uip_lladdr_t *localdest)
 static void
 input(void)
 {
-  /* size of the IP packet (read from fragment) */
-  uint16_t frag_size = 0;
   /* offset of the fragment in the IP packet */
   uint8_t frag_offset = 0;
   uint8_t *buffer;
+
+#if SICSLOWPAN_CONF_FRAG || SICSLOWPAN_COMPRESSION == SICSLOWPAN_COMPRESSION_HC06
+  /* size of the IP packet (read from fragment) */
+  uint16_t frag_size = 0;
+#endif
 
 #if SICSLOWPAN_CONF_FRAG
   uint8_t is_fragment = 0;
