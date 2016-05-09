@@ -81,6 +81,7 @@ endif
 # Make IPv6 the default stack
 ifeq ($(HAS_STACK),0)
 ifneq ($(CONTIKI_WITH_IPV6),0)
+HAS_STACK = 1
 CONTIKI_WITH_IPV6 = 1
 endif
 endif
