@@ -27,9 +27,38 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "contiki.h"
+#include <stdio.h>
+
+#include "cc2520.h"
+#include "contiki-net.h"
 #include "dev/watchdog.h"
 
+static void
+set_link_address(void)
+{
+  linkaddr_t addr = { 0 };
+
+  addr.u8[7] = NODE_ID & 0xff;
+  addr.u8[6] = NODE_ID >> 8;
+
+  linkaddr_set_node_addr(&addr);
+}
+/*---------------------------------------------------------------------------*/
+static void
+setup_radio(void)
+{
+  uint8_t longaddr[8];
+  uint16_t shortaddr;
+
+  shortaddr = (linkaddr_node_addr.u8[0] << 8) +
+    linkaddr_node_addr.u8[1];
+  memset(longaddr, 0, sizeof(longaddr));
+  linkaddr_copy((linkaddr_t *)&longaddr, &linkaddr_node_addr);
+
+  cc2520_set_pan_addr(IEEE802154_PANID, shortaddr, longaddr);
+  cc2520_set_channel(RF_CHANNEL);
+ }
+/*---------------------------------------------------------------------------*/
 int
 main(void)
 {
@@ -40,6 +69,18 @@ main(void)
 
   process_start(&etimer_process, NULL);
   ctimer_init();
+
+  set_link_address();
+
+  queuebuf_init();
+  netstack_init();
+
+  setup_radio();
+
+  memcpy(&uip_lladdr.addr, linkaddr_node_addr.u8,
+         UIP_LLADDR_LEN > LINKADDR_SIZE ? LINKADDR_SIZE : UIP_LLADDR_LEN);
+
+  process_start(&tcpip_process, NULL);
 
   watchdog_start();
   autostart_start(autostart_processes);

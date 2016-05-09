@@ -46,6 +46,38 @@ typedef unsigned long clock_time_t;
 typedef uint32_t rtimer_clock_t;
 #define RTIMER_CLOCK_LT(a, b)     ((int32_t)((a) - (b)) < 0)
 
+#define NETSTACK_CONF_RADIO                     cc2520_driver
+#define NETSTACK_CONF_FRAMER                    framer_802154
+#define NETSTACK_CONF_NETWORK                   sicslowpan_driver
+
+#define SICSLOWPAN_CONF_FRAG                    0
+#define SICSLOWPAN_CONF_COMPRESSION             0
+
+#define UIP_CONF_LL_802154                      1
+#define UIP_CONF_BROADCAST                      1
+#define UIP_CONF_UDP_CONNS                      5
+#define UIP_CONF_IP_FORWARD                     0
+#define UIP_CONF_ROUTER                         0
+#define UIP_CONF_MAX_ROUTES                     0
+#define UIP_CONF_TCP                            0
+#define UIP_CONF_ND6_SEND_NA                    0
+#define UIP_CONF_ND6_SEND_RA                    0
+
+#define NBR_TABLE_CONF_MAX_NEIGHBORS            0
+
+#define CC2520_CONF_AUTOACK                     1
+
+#define RF_CHANNEL                              26
+
+#define LINKADDR_CONF_SIZE                      8
+
+/* This macro defines the Node ID which is used to generate the
+ * link address.
+ */
+#ifndef NODE_ID
+#define NODE_ID                                 3
+#endif /* NODE_ID */
+
 /* Include the project config */
 /* PROJECT_CONF_H might be defined in the project Makefile */
 #ifdef PROJECT_CONF_H
