@@ -39,16 +39,10 @@
 #include "net/mac/frame802154.h"
 #include "net/queuebuf.h"
 
-#if NETSTACK_CONF_WITH_IPV6
 #include "net/ipv6/uip-ds6.h"
-#endif /* NETSTACK_CONF_WITH_IPV6 */
 
 SENSORS(&button_sensor, &button_sensor2);
 
-/*
- * FIXME(jeez): move all network related code out of this .c file and protect it
- * with a -DQUARK_SE_DEVBOARD_NETWORK_ENABLED of some sort.
- */
 static void
 set_node_addr(void)
 {
@@ -57,13 +51,8 @@ set_node_addr(void)
 
   memset(&n_addr, 0, sizeof(linkaddr_t));
 
-#if NETSTACK_CONF_WITH_IPV6
   n_addr.u8[7] = NODE_ID & 0xff;
   n_addr.u8[6] = NODE_ID >> 8;
-#else
-  n_addr.u8[0] = NODE_ID & 0xff;
-  n_addr.u8[1] = NODE_ID >> 8;
-#endif
 
   linkaddr_set_node_addr(&n_addr);
   printf("Network started with address ");
@@ -71,6 +60,47 @@ set_node_addr(void)
     printf("%d.", n_addr.u8[i]);
   }
   printf("%d\n", n_addr.u8[i]);
+}
+/*---------------------------------------------------------------------------*/
+static void
+setup_radio(void)
+{
+  uint8_t longaddr[8];
+  uint16_t shortaddr;
+
+  shortaddr = (linkaddr_node_addr.u8[0] << 8) +
+    linkaddr_node_addr.u8[1];
+  memset(longaddr, 0, sizeof(longaddr));
+  linkaddr_copy((linkaddr_t *)&longaddr, &linkaddr_node_addr);
+
+  printf("MAC %x:%x:%x:%x:%x:%x:%x:%x ",
+         longaddr[0], longaddr[1], longaddr[2], longaddr[3],
+         longaddr[4], longaddr[5], longaddr[6], longaddr[7]);
+
+  cc2520_set_pan_addr(IEEE802154_PANID, shortaddr, longaddr);
+  cc2520_set_channel(RF_CHANNEL);
+
+  printf("%s %s, channel check rate %lu Hz, radio channel %u\n",
+         NETSTACK_MAC.name, NETSTACK_RDC.name,
+         CLOCK_SECOND / (unsigned long)(NETSTACK_RDC.channel_check_interval() == 0 ? 1 :
+                                        NETSTACK_RDC.channel_check_interval()),
+         RF_CHANNEL);
+}
+/*---------------------------------------------------------------------------*/
+static void
+print_link_local_address(void)
+{
+  uip_ds6_addr_t *lladdr;
+  int i;
+
+  printf("Tentative link-local IPv6 address ");
+
+  lladdr = uip_ds6_get_link_local(-1);
+  for(i = 0; i < 7; ++i) {
+    printf("%x%x:", lladdr->ipaddr.u8[i * 2],
+           lladdr->ipaddr.u8[i * 2 + 1]);
+  }
+  printf("%x%x\n", lladdr->ipaddr.u8[14], lladdr->ipaddr.u8[15]);
 }
 /*---------------------------------------------------------------------------*/
 int
@@ -88,61 +118,19 @@ main(void)
 
   watchdog_start();
 
-  /* Networking Init Code.
-   *
-   * FIXME(jeez): move this out of this .c file and protect it with a
-   * -DQUARK_SE_DEVBOARD_NETWORK_ENABLED of some sort.
-   */
   set_node_addr();
 
-  cc2520_init();
-  {
-    uint8_t longaddr[8];
-    uint16_t shortaddr;
+  netstack_init();
+  queuebuf_init();
 
-    shortaddr = (linkaddr_node_addr.u8[0] << 8) +
-      linkaddr_node_addr.u8[1];
-    memset(longaddr, 0, sizeof(longaddr));
-    linkaddr_copy((linkaddr_t *)&longaddr, &linkaddr_node_addr);
+  setup_radio();
 
-    printf("MAC %x:%x:%x:%x:%x:%x:%x:%x ",
-           longaddr[0], longaddr[1], longaddr[2], longaddr[3],
-           longaddr[4], longaddr[5], longaddr[6], longaddr[7]);
-
-    cc2520_set_pan_addr(IEEE802154_PANID, shortaddr, longaddr);
-  }
-  cc2520_set_channel(RF_CHANNEL);
-
-#if NETSTACK_CONF_WITH_IPV6
-  /* memcpy(&uip_lladdr.addr, ds2411_id, sizeof(uip_lladdr.addr)); */
   memcpy(&uip_lladdr.addr, linkaddr_node_addr.u8,
          UIP_LLADDR_LEN > LINKADDR_SIZE ? LINKADDR_SIZE : UIP_LLADDR_LEN);
 
-  queuebuf_init();
-  NETSTACK_RDC.init();
-  NETSTACK_MAC.init();
-  NETSTACK_NETWORK.init();
-
-  printf("%s %s, channel check rate %lu Hz, radio channel %u\n",
-         NETSTACK_MAC.name, NETSTACK_RDC.name,
-         CLOCK_SECOND / (unsigned long)(NETSTACK_RDC.channel_check_interval() == 0 ? 1 :
-                                        NETSTACK_RDC.channel_check_interval()),
-         RF_CHANNEL);
-
   process_start(&tcpip_process, NULL);
 
-  printf("Tentative link-local IPv6 address ");
-  {
-    uip_ds6_addr_t *lladdr;
-    int i;
-    lladdr = uip_ds6_get_link_local(-1);
-    for(i = 0; i < 7; ++i) {
-      printf("%x%x:", lladdr->ipaddr.u8[i * 2],
-             lladdr->ipaddr.u8[i * 2 + 1]);
-    }
-    printf("%x%x\n", lladdr->ipaddr.u8[14], lladdr->ipaddr.u8[15]);
-  }
-#endif
+  print_link_local_address();
 
   autostart_start(autostart_processes);
 
