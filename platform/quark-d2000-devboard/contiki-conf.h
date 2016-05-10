@@ -67,7 +67,7 @@ typedef uint32_t rtimer_clock_t;
 
 #define CC2520_CONF_AUTOACK                     1
 
-#define RF_CHANNEL                              26
+#define RF_CHANNEL                              20
 
 #define LINKADDR_CONF_SIZE                      8
 

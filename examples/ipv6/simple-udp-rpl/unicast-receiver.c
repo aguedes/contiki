@@ -41,8 +41,6 @@
 #include "simple-udp.h"
 #include "servreg-hack.h"
 
-#include "net/rpl/rpl.h"
-
 #include <stdio.h>
 #include <string.h>
 
@@ -97,39 +95,9 @@ set_global_address(void)
   return &ipaddr;
 }
 /*---------------------------------------------------------------------------*/
-static void
-create_rpl_dag(uip_ipaddr_t *ipaddr)
-{
-  struct uip_ds6_addr *root_if;
-
-  root_if = uip_ds6_addr_lookup(ipaddr);
-  if(root_if != NULL) {
-    rpl_dag_t *dag;
-    uip_ipaddr_t prefix;
-    
-    rpl_set_root(RPL_DEFAULT_INSTANCE, ipaddr);
-    dag = rpl_get_any_dag();
-    uip_ip6addr(&prefix, UIP_DS6_DEFAULT_PREFIX, 0, 0, 0, 0, 0, 0, 0);
-    rpl_set_prefix(dag, &prefix, 64);
-    PRINTF("created a new RPL dag\n");
-  } else {
-    PRINTF("failed to create a new RPL DAG\n");
-  }
-}
-/*---------------------------------------------------------------------------*/
 PROCESS_THREAD(unicast_receiver_process, ev, data)
 {
-  uip_ipaddr_t *ipaddr;
-
   PROCESS_BEGIN();
-
-  servreg_hack_init();
-
-  ipaddr = set_global_address();
-
-  create_rpl_dag(ipaddr);
-
-  servreg_hack_register(SERVICE_ID, ipaddr);
 
   simple_udp_register(&unicast_connection, UDP_PORT,
                       NULL, UDP_PORT, receiver);

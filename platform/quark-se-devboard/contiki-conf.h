@@ -60,8 +60,8 @@ typedef uint32_t rtimer_clock_t;
 #define NETSTACK_CONF_WITH_IPV6                 1
 #define NETSTACK_CONF_RDC_CHANNEL_CHECK_RATE    8
 
-#define SICSLOWPAN_CONF_COMPRESSION             SICSLOWPAN_COMPRESSION_HC06
-#define SICSLOWPAN_CONF_FRAG                    1
+#define SICSLOWPAN_CONF_COMPRESSION             0
+#define SICSLOWPAN_CONF_FRAG                    0
 #define SICSLOWPAN_CONF_MAXAGE                  8
 #define SICSLOWPAN_CONF_MAX_ADDR_CONTEXTS       2
 
@@ -99,11 +99,11 @@ typedef uint32_t rtimer_clock_t;
 
 #define CC2520_CONF_AUTOACK                     1
 
-#define RF_CHANNEL                              26
+#define RF_CHANNEL                              20
 
 #define LINKADDR_CONF_SIZE                      8
 
-#define NODE_ID                                 3
+#define NODE_ID                                 4
 
 /* Include the project config */
 /* PROJECT_CONF_H might be defined in the project Makefile */
