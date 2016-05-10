@@ -47,10 +47,6 @@
 
 SENSORS(&button_sensor, &button_sensor2);
 
-/*
- * FIXME(jeez): move all network related code out of this .c file and protect it
- * with a -DQUARK_SE_DEVBOARD_NETWORK_ENABLED of some sort.
- */
 static void
 set_node_addr(void)
 {
@@ -126,11 +122,6 @@ main(void)
 
   watchdog_start();
 
-  /* Networking Init Code.
-   *
-   * FIXME(jeez): move this out of this .c file and protect it with a
-   * -DQUARK_SE_DEVBOARD_NETWORK_ENABLED of some sort.
-   */
   set_node_addr();
 
   netstack_init();
